@@ -3,14 +3,13 @@ import mysql.connector
 
 app = FastAPI()
 
-# DB Connection
 def get_db():
     return mysql.connector.connect(
         host="localhost",
         user="root",
         password="Rkdash@7",
         database="movie_db",
-        ssl_disabled=True   # 🔥 fixes your SSL error
+        ssl_disabled=True   
     )
 @app.get("/")
 def home():
@@ -40,7 +39,6 @@ def recommend(user_id: int):
     conn = get_db()
     cursor = conn.cursor(dictionary=True)
 
-    # Step 1: Get user's liked movies (LIMIT small)
     cursor.execute("""
         SELECT movieId FROM ratings
         WHERE userId = %s AND rating >= 4
@@ -54,7 +52,6 @@ def recommend(user_id: int):
 
     format_strings = ','.join(['%s'] * len(liked_movies))
 
-    # Step 2: SIMPLE + FAST query (NO GROUP BY)
     cursor.execute(f"""
         SELECT DISTINCT m.title
         FROM movies m
