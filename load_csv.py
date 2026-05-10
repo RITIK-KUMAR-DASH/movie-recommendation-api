@@ -4,7 +4,6 @@ from db import get_connection
 conn = get_connection()
 cursor = conn.cursor()
 
-# -------- LOAD MOVIES -------- #
 movies = pd.read_csv("movies.csv")
 
 cursor.executemany(
